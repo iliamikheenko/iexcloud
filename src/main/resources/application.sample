@@ -1,0 +1,35 @@
+server:
+  port:
+spring:
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+    hikari:
+      schema:
+      maximum-pool-size: 10
+      minimum-idle: 3
+      idle-timeout: 30000
+      max-lifetime: 50000
+      connection-timeout: 30000
+  liquibase:
+    enabled: true
+    change-log:
+    url:
+    database-change-log-table: schema_history
+    database-change-log-lock-table: schema_lock_history
+    password:
+    user:
+    liquibase-schema:
+
+company:
+  info:
+    token:
+
+fixed:
+  statistic:
+    delay:
+
+batch:
+  size:

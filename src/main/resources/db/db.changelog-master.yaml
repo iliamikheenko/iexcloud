@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/clear.sql
+  - include:
+      file: db/tables/create_company_table.sql
+  - include:
+      file: db/tables/create_stock_info_table.sql
+  - include:
+      file: db/tables/create_price_history_table.sql
+  - include:
+      file: db/functions/create_functions.sql
+  - include:
+      file: db/triggers/create_triggers.sql
