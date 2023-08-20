@@ -16,7 +16,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final StockInfoMapper stockInfoMapper;
 
     @Override
-    @Scheduled(fixedRateString = "${fixed.statistic.delay}", initialDelay = 60000)
+    @Scheduled(fixedRateString = "${fixed.statistic.delay}", initialDelay = 90000)
     public void getTopCompaniesByValue() {
         var topFivePrice = stockInfoRepository.findTop5ByOrderByLatestPriceDesc();
         System.out.println("Top five with highest price:");
@@ -26,7 +26,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    @Scheduled(fixedRateString = "${fixed.statistic.delay}", initialDelay = 60000)
+    @Scheduled(fixedRateString = "${fixed.statistic.delay}", initialDelay = 90000)
     public void getTopCompaniesByPercentageChange() {
         var topFivePercent = stockInfoRepository.findTop5ByOrderByChangePercent();
         System.out.println("Top five with highest dif of price:");

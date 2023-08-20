@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -45,15 +46,14 @@ class StockInfoServiceImpl implements StockInfoService {
                 //TODO check mapper here
                 //.map(companyMapper::toEntity)
                 .map(c -> Company.builder().symbol(c.getSymbol()).isEnabled(c.isEnabled()).build())
-                .limit(150)
                 .forEach(companyRepository::save);
-        fetchAndSaveStockInfo();
     }
 
-    private void fetchAndSaveStockInfo(){
-        while (true){
-            List<Company> savedCompanies = companyRepository.findAllByIsEnabledTrue();
 
+    @Scheduled(initialDelayString = "60000")
+    private void fetchAndSaveStockInfo(){
+        List<Company> savedCompanies = companyRepository.findAllByIsEnabledTrue();
+        while (true){
             for (int i = 0; i < savedCompanies.size(); i += batchSize) {
                 List<Company> batch = savedCompanies.subList(i, Math.min(i + batchSize, savedCompanies.size()));
                 fetchAndSaveStockInfoAsync(batch);
@@ -80,9 +80,13 @@ class StockInfoServiceImpl implements StockInfoService {
 
     private CompletableFuture<Void> fetchAndSaveStockInfoAsync(Company company) {
         return CompletableFuture.runAsync(() -> {
+            log.info("Sending request for fetching info for company: {}", company.getSymbol());
+
             StockInfo stockInfo = stockInfoClient.getStockInfo(company.getSymbol(), token);
             stockInfo.setCompanyId(company.getId());
             stockInfoRepository.save(stockInfo);
+
+            log.info("Stock info saved for company{}: ", company.getSymbol());
         }, executorService);
     }
 }

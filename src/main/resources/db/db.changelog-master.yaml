@@ -1,7 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/clear.sql
-  - include:
       file: db/tables/create_company_table.sql
   - include:
       file: db/tables/create_stock_info_table.sql
